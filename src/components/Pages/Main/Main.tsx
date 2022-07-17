@@ -1,7 +1,18 @@
 import React from 'react';
+
 import { HabitsList } from '../../Habits/Habits';
+import { useStoreWithInitializer } from '../../../store/storeHooks';
+import { store } from '../../../store/store';
+import { loadHabits } from './Main.slice';
 
 export const Main = () => {
+  const { habits } = useStoreWithInitializer(({ main }) => main, load);
+
+  if (!habits) return <>no habits</>;
+  return <HabitsList habits={habits} />;
+};
+
+async function load() {
   const habits = [
     {
       id: '1',
@@ -37,5 +48,5 @@ export const Main = () => {
     },
   ];
 
-  return <HabitsList habits={habits} />;
-};
+  store.dispatch(loadHabits(habits));
+}
